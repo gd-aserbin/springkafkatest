@@ -1,0 +1,24 @@
+#java specific
+*.class
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+#.gitignore
+.classpath
+.project
+.settings/
+activemq-data/
+.DS_Store
+.springbeans
+#javadoc
+doc/
+#Embedded hive
+metastore_db
+build
+#idea
+.idea/
+*.iml
+pmip/
+*.log
