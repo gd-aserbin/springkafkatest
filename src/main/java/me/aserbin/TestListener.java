@@ -19,5 +19,9 @@ public class TestListener {
     public void listen(@Payload(required = false) List<String> message,
                        Acknowledgment ack, Consumer<String, String> consumer) {
         message.forEach(System.out::println);
+
+        // emulate re-reads with exception
+
+        throw new RuntimeException();
     }
 }

@@ -1,6 +1,8 @@
 package me.aserbin;
 
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +17,8 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.BatchErrorHandler;
+import org.springframework.kafka.listener.ContainerAwareBatchErrorHandler;
+import org.springframework.kafka.listener.MessageListenerContainer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +70,13 @@ public class Main {
         factory.setConsumerFactory(consumerFactory);
         factory.setConcurrency(concurrency);
         factory.setBatchListener(true);
+        factory.getContainerProperties().setBatchErrorHandler(new ContainerAwareBatchErrorHandler() {
+            @Override
+            public void handle(Exception thrownException, ConsumerRecords<?, ?> data, Consumer<?, ?> consumer, MessageListenerContainer container) {
+                container.stop();
+                container.start();
+            }
+        });
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
