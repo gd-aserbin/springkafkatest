@@ -19,11 +19,10 @@ public class Producer {
                 new StringSerializer(),
                 new StringSerializer());
 
-        prod.send(new ProducerRecord<>("test-poll", "1", new Date().toString()));
-        prod.flush();
-
-
-
+        for (int i = 0; i< 10;i++) {
+            prod.send(new ProducerRecord<>("test-poll2019", 0,"1", new Date().toString()));
+            prod.flush();
+        }
 
     }
 }
